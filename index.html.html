@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Caveat:wght@400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin:0; padding:0; background:#15131f; }
+    @keyframes storyIn { from { opacity:0; transform: translateY(22px) } to { opacity:1; transform:none } }
+    @keyframes storyInSlow { from { opacity:0; transform: translateY(34px) } to { opacity:1; transform:none } }
+    @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+    @keyframes softPulse { 0%,100%{opacity:.45} 50%{opacity:1} }
+    @keyframes tearL { to { transform: translate(-112%, 7%) rotate(-8deg) } }
+    @keyframes tearR { to { transform: translate(112%, 7%) rotate(8deg) } }
+    @keyframes spinSlow { to { transform: rotate(360deg) } }
+    @keyframes drawIn { from { opacity:0; transform: scale(.82) rotate(var(--r,0deg)) } to { opacity:1; transform: scale(1) rotate(var(--r,0deg)) } }
+    @keyframes revealUp { from { opacity:0; transform: translateY(36px) } to { opacity:1; transform: none } }
+    @keyframes driftY { 0%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-16px) rotate(6deg)} 100%{transform:translateY(0) rotate(-6deg)} }
+    @keyframes eq { 0%,100%{transform:scaleY(.35)} 50%{transform:scaleY(1)} }
+    @keyframes loadSlide { 0%{transform:translateX(-110%)} 100%{transform:translateX(360%)} }
+    ::selection { background:#ff5e8a; color:#fff; }
+  </style>
+  <script src="./image-slot.js"></script>
+</helmet>
+
+<audio id="bg-audio" loop preload="metadata"><source src="music.mp3" type="audio/mpeg"></audio>
+
+<!-- ================= LOADING ================= -->
+<sc-if value="{{ loadingMounted }}" hint-placeholder-val="{{ true }}">
+<div style="position:fixed;inset:0;z-index:50;background:#f1e3c8;background-image:linear-gradient(160deg,#f6ecd6,#e9d8b6);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#3a2c1e">
+  <div style="font-size:30px;color:#9a1f33;animation:floatY 2.6s ease-in-out infinite">&#10084;</div>
+  <div style="margin-top:16px;font-family:'Special Elite',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#7a6244">preparando o nosso dia</div>
+  <div style="margin-top:18px;width:160px;height:3px;border-radius:3px;background:rgba(154,31,51,.15);overflow:hidden;position:relative">
+    <div style="position:absolute;top:0;left:0;height:100%;width:34%;background:#9a1f33;border-radius:3px;animation:loadSlide 1.3s ease-in-out infinite"></div>
+  </div>
+  <div style="margin-top:12px;font-family:'Caveat',cursive;font-size:18px;color:#9a8472">Capítulo I &middot; 21/06</div>
+</div>
+</sc-if>
+
+<!-- ================= ITINERÁRIO (camada base) ================= -->
+<div style="position:relative;min-height:100vh;width:100%;background:#f3e7d2;background-image:radial-gradient(120% 80% at 50% -10%, #faf1df 0%, #f3e7d2 55%, #ecdcc1 100%);color:#2a2030;overflow:hidden">
+
+  <!-- grão de papel -->
+  <div style="position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E&quot;)"></div>
+
+  <!-- corações flutuando (itinerário) -->
+  <sc-if value="{{ decorOn }}" hint-placeholder-val="{{ true }}">
+  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+    <span style="position:absolute;left:8%;top:14%;font-size:30px;color:var(--acc,#b21e35);opacity:.08;animation:driftY 8s ease-in-out infinite">&#10084;</span>
+    <span style="position:absolute;left:86%;top:30%;font-size:42px;color:var(--acc,#b21e35);opacity:.07;animation:driftY 9.5s ease-in-out 1s infinite">&#10084;</span>
+    <span style="position:absolute;left:12%;top:58%;font-size:24px;color:var(--acc,#b21e35);opacity:.08;animation:driftY 7.4s ease-in-out .6s infinite">&#10084;</span>
+    <span style="position:absolute;left:82%;top:74%;font-size:34px;color:var(--acc,#b21e35);opacity:.06;animation:driftY 10s ease-in-out 1.6s infinite">&#10084;</span>
+  </div>
+  </sc-if>
+
+  <div style="position:relative;max-width:640px;margin:0 auto;padding:64px 26px 120px">
+
+    <!-- HERO -->
+    <div data-reveal style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);text-align:center;margin-bottom:14px">
+      <div style="font-family:'Special Elite',monospace;letter-spacing:4px;font-size:11px;text-transform:uppercase;color:var(--acc,#b21e35);opacity:.85">Dia dos Namorados</div>
+      <div style="margin-top:8px;font-family:'Special Elite',monospace;font-size:12px;color:#9a8472"><span style="text-decoration:line-through;text-decoration-color:var(--acc,#b21e35);opacity:.6">12 de junho</span><span style="font-family:'Caveat',cursive;font-size:23px;color:var(--acc,#b21e35);margin-left:9px;display:inline-block;transform:rotate(-4deg)">21 de junho</span></div>
+      <div style="font-family:'Caveat',cursive;font-size:18px;color:#9a8472;margin-top:2px;transform:rotate(-1.5deg)">a gente se atrasou de novo, eu sei &#128517;</div>
+      <div style="height:18px"></div>
+      <div style="font-family:'Caveat',cursive;font-size:30px;color:#9a3b2a;transform:rotate(-3deg)">o roteiro do</div>
+      <h1 style="margin:.05em 0 0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:74px;line-height:.92;color:#2a2030">Nosso Dia</h1>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:22px;color:var(--acc,#b21e35)">
+        <span style="height:1px;width:54px;background:#c9a98a"></span>
+        <span style="font-size:13px">&#10084;</span>
+        <span style="height:1px;width:54px;background:#c9a98a"></span>
+      </div>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;line-height:1.5;color:#5a4a52;max-width:430px;margin:24px auto 0;text-wrap:pretty">Um roteiro pra você ficar tranquila com horários e lugares.</p>
+      <div style="font-family:'Caveat',cursive;font-size:18px;color:#b59a86;opacity:.85;margin-top:10px;transform:rotate(-1deg)">(na verdade é só uma desculpa pra mostrar o quanto eu gosto de você…)</div>
+      <div style="margin-top:30px;font-family:'Special Elite',monospace;font-size:11px;letter-spacing:2px;color:#9a8472;animation:softPulse 2.4s ease-in-out infinite">role para começar &#8595;</div>
+    </div>
+
+    <div style="height:54px"></div>
+
+    <!-- linha do tempo -->
+    <div style="position:relative">
+      <div style="position:absolute;left:50%;top:6px;bottom:120px;width:2px;margin-left:-1px;background:repeating-linear-gradient(#c9a98a 0 7px, transparent 7px 15px);opacity:.6"></div>
+
+      <!-- PARADA 1 -->
+      <div data-reveal style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);position:relative;margin-bottom:74px">
+        <div style="display:flex;justify-content:center;margin-bottom:18px"><div style="width:44px;height:44px;border-radius:50%;background:var(--acc,#b21e35);color:#faf1df;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;box-shadow:0 6px 18px rgba(178,30,53,.3)">01</div></div>
+        <div style="background:#fffaf1;border-radius:3px;padding:18px;box-shadow:0 14px 34px rgba(80,40,30,.16);transform:rotate(-1.4deg);max-width:430px;margin:0 auto;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;margin-left:-46px;width:92px;height:24px;background:rgba(178,30,53,.16);transform:rotate(-3deg)"></div>
+          <div style="border:1px solid #eaddc8;padding:10px 10px 0;background:#fff">
+            <image-slot id="stop1" src="img/ponto-de-encontro.jpg" style="display:block;width:100%;height:200px" shape="rect" placeholder="foto de onde a gente se conheceu"></image-slot>
+            <div style="font-family:'Caveat',cursive;font-size:24px;color:#7a3a2a;text-align:center;padding:6px 0 8px">onde tudo começou</div>
+          </div>
+          <div style="padding:16px 8px 6px;text-align:center">
+            <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--acc,#b21e35)">Você que é a Melissa?</div>
+            <h3 style="margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;color:#2a2030">Em frente ao parque</h3>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5a4a52;margin:8px 0 16px">Te encontro exatamente onde a gente se viu pela primeira vez.</p>
+            <a href="https://maps.app.goo.gl/PzYicyB2qAvVVm198" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:var(--acc,#b21e35);color:#fff;text-decoration:none;font-family:'Special Elite',monospace;font-size:12px;letter-spacing:1px;padding:11px 20px;border-radius:40px;box-shadow:0 8px 18px rgba(178,30,53,.28)">&#9906; abrir no maps</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARADA 2 -->
+      <div data-reveal style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);position:relative;margin-bottom:74px">
+        <div style="display:flex;justify-content:center;margin-bottom:18px"><div style="width:44px;height:44px;border-radius:50%;background:var(--acc,#b21e35);color:#faf1df;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;box-shadow:0 6px 18px rgba(178,30,53,.3)">02</div></div>
+        <div style="background:#fffaf1;border-radius:3px;padding:18px;box-shadow:0 14px 34px rgba(80,40,30,.16);transform:rotate(1.6deg);max-width:430px;margin:0 auto;position:relative">
+          <div style="position:absolute;top:-12px;right:24px;width:80px;height:22px;background:rgba(178,30,53,.16);transform:rotate(5deg)"></div>
+          <div style="border:1px solid #eaddc8;padding:10px 10px 0;background:#fff">
+            <image-slot id="stop2" src="img/sorvete.jpg" style="display:block;width:100%;height:200px" shape="rect" placeholder="foto do sorvete / da volta"></image-slot>
+            <div style="font-family:'Caveat',cursive;font-size:24px;color:#7a3a2a;text-align:center;padding:6px 0 8px">Faz tempo que não vamos lá…</div>
+          </div>
+          <div style="padding:16px 8px 6px;text-align:center">
+            <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--acc,#b21e35)">Um sorvete &middot; uma pazinha</div>
+            <h3 style="margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;color:#2a2030">No nosso lugar especial</h3>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5a4a52;margin:8px 0 2px">Às vezes eu me pergunto se você vem pelo sorvete ou pela Pazinha.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARADA 3 -->
+      <div data-reveal style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);position:relative;margin-bottom:74px">
+        <div style="display:flex;justify-content:center;margin-bottom:18px"><div style="width:44px;height:44px;border-radius:50%;background:var(--acc,#b21e35);color:#faf1df;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;box-shadow:0 6px 18px rgba(178,30,53,.3)">03</div></div>
+        <div style="background:#fffaf1;border-radius:3px;padding:18px;box-shadow:0 14px 34px rgba(80,40,30,.16);transform:rotate(-1.1deg);max-width:430px;margin:0 auto;position:relative">
+          <div style="position:absolute;top:-12px;left:24px;width:80px;height:22px;background:rgba(178,30,53,.16);transform:rotate(-5deg)"></div>
+          <div style="border:1px solid #eaddc8;padding:10px 10px 0;background:#fff">
+            <image-slot id="stop3" src="img/parque.jpg" style="display:block;width:100%;height:200px" shape="rect" placeholder="foto do parque das águas"></image-slot>
+            <div style="font-family:'Caveat',cursive;font-size:24px;color:#7a3a2a;text-align:center;padding:6px 0 8px">Gosto de passar o tempo aqui, é um lugar leve…</div>
+          </div>
+          <div style="padding:16px 8px 6px;text-align:center">
+            <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--acc,#b21e35)">Nossa tarde</div>
+            <h3 style="margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;color:#2a2030">Parque das Águas</h3>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5a4a52;margin:8px 0 6px">A gente entra, dá uma volta longa e deixa o tempo passar devagar por um pouquinho. Hoje vai dar tempo, se não der, a gente fica até o segurança quase expulsar a gente como no ano passado.</p>
+            <div style="font-family:'Caveat',cursive;font-size:20px;color:#9a3b2a;transform:rotate(-1.5deg)">tirando a parte do segurança &#128517;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARADA 4 -->
+      <div data-reveal style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);position:relative;margin-bottom:74px">
+        <div style="display:flex;justify-content:center;margin-bottom:18px"><div style="width:44px;height:44px;border-radius:50%;background:var(--acc,#b21e35);color:#faf1df;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;box-shadow:0 6px 18px rgba(178,30,53,.3)">04</div></div>
+        <div style="background:#fffaf1;border-radius:3px;padding:18px;box-shadow:0 14px 34px rgba(80,40,30,.16);transform:rotate(1.3deg);max-width:430px;margin:0 auto;position:relative">
+          <div style="position:absolute;top:-12px;right:28px;width:86px;height:22px;background:rgba(178,30,53,.16);transform:rotate(4deg)"></div>
+          <div style="position:relative;border:1px dashed #d8c4a8;background:repeating-linear-gradient(45deg,#f3e7d2 0 12px,#efe1c8 12px 24px);height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:2px">
+            <div style="color:var(--acc,#b21e35)"><svg width="42" height="42" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="22" width="24" height="17" rx="3"/><path d="M17 22v-5a7 7 0 0 1 14 0v5"/><circle cx="24" cy="30" r="1.6"/></svg></div>
+            <div style="font-family:'Special Elite',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--acc,#b21e35)">bloqueado</div>
+          </div>
+          <div style="padding:16px 8px 6px;text-align:center">
+            <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#9a8472">??? &middot; surpresa</div>
+            <h3 style="margin:10px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:26px;color:#bcae9c;letter-spacing:8px">&bull; &bull; &bull;</h3>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5a4a52;margin:10px 0 6px">Aqui é uma surpresa, algo simples, mas com amor <span style="color:var(--acc,#b21e35);font-size:15px">&#10084;</span></p>
+            <div style="font-family:'Caveat',cursive;font-size:20px;color:#9a3b2a;transform:rotate(-1.5deg)"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARADA 5 -->
+      <div data-reveal style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);position:relative;margin-bottom:36px">
+        <div style="display:flex;justify-content:center;margin-bottom:18px"><div style="width:44px;height:44px;border-radius:50%;background:var(--acc,#b21e35);color:#faf1df;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;box-shadow:0 6px 18px rgba(178,30,53,.3)">05</div></div>
+        <div style="background:#fffaf1;border-radius:3px;padding:18px;box-shadow:0 14px 34px rgba(80,40,30,.16);transform:rotate(-1.6deg);max-width:430px;margin:0 auto;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;margin-left:-44px;width:88px;height:22px;background:rgba(178,30,53,.16);transform:rotate(2deg)"></div>
+          <div style="border:1px solid #eaddc8;padding:10px 10px 0;background:#fff">
+            <image-slot id="stop5" src="img/ver-o-ceu.jpg" style="display:block;width:100%;height:200px" shape="rect" placeholder="foto do piquenique"></image-slot>
+            <div style="font-family:'Caveat',cursive;font-size:24px;color:#7a3a2a;text-align:center;padding:6px 0 8px">Olhar para as nuvens</div>
+          </div>
+          <div style="padding:16px 8px 6px;text-align:center">
+            <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--acc,#b21e35)">Lembro de um momento nosso…</div>
+            <h3 style="margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;color:#2a2030">Topa assistir o céu comigo de novo?</h3>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5a4a52;margin:8px 0 2px">Um dia simples, mas com amor.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEDICATÓRIA -->
+    <div data-reveal style="opacity:0;transform:translateY(36px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);text-align:center;margin-top:40px">
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;color:var(--acc,#b21e35);margin-bottom:18px">
+        <span style="height:1px;width:40px;background:#c9a98a"></span><span style="font-size:13px">&#10084;</span><span style="height:1px;width:40px;background:#c9a98a"></span>
+      </div>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;line-height:1.55;color:#3a2c34;max-width:440px;margin:0 auto;text-wrap:pretty">Eu fiquei pensando no que te dar hoje. Resolvi te dar o dia inteiro — minha atenção e um momento que é só nosso.</p>
+      <div style="font-family:'Caveat',cursive;font-size:40px;color:#9a3b2a;margin-top:26px;transform:rotate(-3deg)">feliz dia dos namorados, moça</div>
+      <div style="font-family:'Special Elite',monospace;font-size:12px;letter-spacing:2px;color:#9a8472;margin-top:14px">&mdash; do seu moço, Antônio</div>
+    </div>
+
+    <!-- CAPÍTULO (rodapé) -->
+    <div data-reveal style="opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);margin-top:64px">
+      <div style="text-align:center;font-family:'Special Elite',monospace;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--acc,#b21e35)">Fim do Capítulo I</div>
+      <div style="text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#5a4a52;margin-top:6px">Aguarde…</div>
+      <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:22px">
+        <div style="width:58px;text-align:center;padding:11px 4px;border:1px solid var(--acc,#b21e35);border-radius:4px;background:rgba(178,30,53,.06)"><div style="font-family:'Special Elite',monospace;font-size:17px;color:var(--acc,#b21e35)">I</div><div style="font-family:'Special Elite',monospace;font-size:9px;letter-spacing:1px;color:#9a8472;margin-top:5px">21/06</div></div>
+        <div style="width:58px;text-align:center;padding:11px 4px;border:1px dashed #c9b79c;border-radius:4px"><div style="font-family:'Special Elite',monospace;font-size:17px;color:#bcab94">II</div><div style="margin:7px auto 0;width:30px;height:9px;background:#2a2030;opacity:.78;border-radius:1px"></div></div>
+        <div style="width:58px;text-align:center;padding:11px 4px;border:1px dashed #c9b79c;border-radius:4px"><div style="font-family:'Special Elite',monospace;font-size:17px;color:#bcab94">III</div><div style="margin:7px auto 0;width:30px;height:9px;background:#2a2030;opacity:.78;border-radius:1px"></div></div>
+        <div style="width:58px;text-align:center;padding:11px 4px;border:1px dashed #c9b79c;border-radius:4px"><div style="font-family:'Special Elite',monospace;font-size:17px;color:#bcab94">IV</div><div style="margin:7px auto 0;width:30px;height:9px;background:#2a2030;opacity:.78;border-radius:1px"></div></div>
+        <div style="width:58px;text-align:center;padding:11px 4px;border:1px dashed #c9b79c;border-radius:4px"><div style="font-family:'Special Elite',monospace;font-size:17px;color:#bcab94">V</div><div style="margin:7px auto 0;width:30px;height:9px;background:#2a2030;opacity:.78;border-radius:1px"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= REELS (overlay) ================= -->
+<sc-if value="{{ reelsMounted }}" hint-placeholder-val="{{ true }}">
+<div style="position:fixed;inset:0;z-index:30;background:#15131f;background-image:var(--rg, radial-gradient(130% 90% at 50% 0%, #2a1730 0%, #1a1426 45%, #120f1c 100%));overflow:hidden;transition:opacity .6s ease;{{ reelsFade }}">
+
+  <!-- grão -->
+  <div style="position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E&quot;)"></div>
+  <!-- brilho -->
+  <div style="position:absolute;top:-20%;left:-10%;width:60%;height:50%;background:radial-gradient(circle, rgba(255,94,138,.18), transparent 70%);pointer-events:none"></div>
+
+  <!-- corações flutuando -->
+  <sc-if value="{{ decorOn }}" hint-placeholder-val="{{ true }}">
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:6;overflow:hidden">
+    <span style="position:absolute;left:9%;top:26%;font-size:15px;color:var(--rs,#ff8aa8);opacity:.45;animation:driftY 5.4s ease-in-out infinite">&#10084;</span>
+    <span style="position:absolute;left:84%;top:20%;font-size:22px;color:var(--rs,#ff8aa8);opacity:.3;animation:driftY 6.8s ease-in-out .5s infinite">&#10084;</span>
+    <span style="position:absolute;left:73%;top:66%;font-size:13px;color:var(--rs,#ff8aa8);opacity:.42;animation:driftY 5.9s ease-in-out 1s infinite">&#10084;</span>
+    <span style="position:absolute;left:14%;top:72%;font-size:19px;color:var(--rs,#ff8aa8);opacity:.28;animation:driftY 7.2s ease-in-out .8s infinite">&#10084;</span>
+    <span style="position:absolute;left:46%;top:11%;font-size:11px;color:var(--rs,#ff8aa8);opacity:.4;animation:driftY 6.1s ease-in-out 1.4s infinite">&#10084;</span>
+    <span style="position:absolute;left:6%;top:52%;font-size:13px;color:var(--rs,#ff8aa8);opacity:.3;animation:driftY 8s ease-in-out .2s infinite">&#10084;</span>
+  </div>
+  </sc-if>
+
+  <!-- zonas de toque -->
+  <div onClick="{{ prev }}" style="position:absolute;left:0;top:0;bottom:0;width:30%;z-index:32;cursor:pointer"></div>
+  <div onClick="{{ next }}" style="position:absolute;right:0;top:0;bottom:0;width:70%;z-index:32;cursor:pointer"></div>
+
+  <!-- STORY 0 -->
+  <sc-if value="{{ s0 }}" hint-placeholder-val="{{ true }}">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:70px 32px;z-index:10">
+    <div style="animation:storyIn .6s cubic-bezier(.2,.7,.2,1) both">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:700;font-style:italic;font-size:46px;line-height:1.04;color:#fdf4ea;margin:0">Bom dia,<br>minha linda</h2>
+      <div style="font-family:'Caveat',cursive;font-size:28px;color:#f9c5d1;transform:rotate(-2deg);margin-top:14px">tudo bem?</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;line-height:1.14;color:#fdf4ea;margin:14px 0 0">sei como você é rígida com horários…</h2>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#cdb9d2;max-width:340px;margin:18px auto 0;line-height:1.5;text-wrap:pretty">então resolvi fazer um itinerário pro nosso dia de hoje.</p>
+      <div style="margin-top:18px;display:inline-block;font-family:'Caveat',cursive;font-size:21px;color:#fff;background:rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.3);padding:6px 15px;border-radius:20px;transform:rotate(-1.5deg)">prometo que não vou me atrasar dessa vez</div>
+    </div>
+    <div style="position:absolute;bottom:96px;left:50%;transform:translateX(-50%);font-family:'Special Elite',monospace;font-size:11px;letter-spacing:2px;color:#9a8aa6;animation:softPulse 2.2s ease-in-out infinite">toque para continuar &#8594;</div>
+    <!-- polaroid -->
+    <div style="position:absolute;top:96px;right:18px;z-index:36;background:#fff;padding:8px 8px 30px;box-shadow:0 16px 34px rgba(0,0,0,.4);transform:rotate(6deg);width:118px">
+      <image-slot id="reel_polaroid" src="img/melissa.png" style="display:block;width:100%;height:118px" shape="rect" placeholder="uma foto sua"></image-slot>
+      <div style="position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:'Caveat',cursive;font-size:18px;color:#6a4a52">você &#10084;</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 1 -->
+  <sc-if value="{{ s1 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:70px 34px;z-index:10">
+    <div style="animation:storyIn .6s cubic-bezier(.2,.7,.2,1) both">
+      <div style="font-family:'Special Elite',monospace;letter-spacing:4px;font-size:12px;color:var(--rs,#ff8aa8);text-transform:uppercase">Ahh, antes de começar</div>
+      <div style="height:22px"></div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:41px;line-height:1.1;color:#fdf4ea;margin:0">fiz uma coisinha pra<br>nos acompanhar hoje.</h2>
+      <div style="font-family:'Caveat',cursive;font-size:28px;color:#f9c5d1;margin-top:22px;transform:rotate(-2deg)">dá uma olhadinha &#8595;</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 2 — PLAYLIST -->
+  <sc-if value="{{ s2 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 28px;z-index:10">
+    <div style="animation:storyIn .6s cubic-bezier(.2,.7,.2,1) both;width:100%;max-width:330px">
+      <div style="font-family:'Special Elite',monospace;letter-spacing:4px;font-size:11px;color:var(--rs,#ff8aa8);text-transform:uppercase">A trilha sonora do dia</div>
+      <div style="height:20px"></div>
+      <div onClick="{{ stop }}" style="position:relative;z-index:36;border-radius:12px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.45)">
+        <iframe title="Spotify" style="border-radius:12px;display:block;width:100%" src="https://open.spotify.com/embed/playlist/7z54CvCbxqKCO0YDYQ3XKN?utm_source=generator&amp;theme=0" height="352" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:#cdb9d2;margin:20px auto 0;line-height:1.5;max-width:300px;text-wrap:pretty">Prometo que vai curtir — tem Caetano Veloso e aquela Ana alguma coisa…</p>
+      <div style="font-family:'Caveat',cursive;font-size:21px;color:#f9c5d1;margin-top:12px;transform:rotate(-1deg)">obviamente tem meus rocks também &#128526;</div>
+      <div style="font-family:'Special Elite',monospace;font-size:9px;letter-spacing:1px;color:#6a6076;margin-top:8px"></div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 3 — INTRO ITENS -->
+  <sc-if value="{{ s3 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:70px 34px;z-index:10">
+    <div style="animation:storyIn .6s cubic-bezier(.2,.7,.2,1) both">
+      <div style="font-family:'Special Elite',monospace;letter-spacing:4px;font-size:12px;color:var(--rs,#ff8aa8);text-transform:uppercase">O mundo não é só de flores…</div>
+      <div style="height:20px"></div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:41px;line-height:1.1;color:#fdf4ea;margin:0">você vai ter que levar<br><span style="color:var(--ra,#ff5e8a)">5 coisinhas</span> pra mim.</h2>
+      <div style="font-family:'Caveat',cursive;font-size:28px;color:#f9c5d1;margin-top:24px;transform:rotate(-2deg)">não pergunta porquê…</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:#cdb9d2;margin:14px auto 0;max-width:300px">você vai entender na hora.</p>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 4 — ITEM 1 -->
+  <sc-if value="{{ s4 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 30px;z-index:10">
+    <div style="animation:drawIn .55s cubic-bezier(.2,.7,.2,1) both;--r:-2.5deg;background:#f4ead6;color:#241c2a;padding:30px 26px;border-radius:3px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:300px;width:100%;text-align:center;position:relative">
+      <div style="position:absolute;top:-13px;left:50%;margin-left:-40px;width:80px;height:24px;background:rgba(255,255,255,.55);transform:rotate(-4deg)"></div>
+      <div style="font-family:'Special Elite',monospace;font-size:50px;line-height:1;color:var(--ra2,#e94560)">01</div>
+      <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;color:#9a8472;margin-top:4px">DOS CINCO</div>
+      <div style="margin:16px auto;width:64px;height:64px;border-radius:50%;background:rgba(178,30,53,.07);display:flex;align-items:center;justify-content:center;color:var(--acc,#b21e35)"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="15" y="8" width="18" height="6" rx="2"/><path d="M16 14h16a3 3 0 0 1 3 3v19a3 3 0 0 1-3 3H16a3 3 0 0 1-3-3V17a3 3 0 0 1 3-3z"/><line x1="13" y1="21" x2="35" y2="21"/></svg></div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;margin:0;color:#241c2a">um pote de vidro</h2>
+      <div style="font-family:'Caveat',cursive;font-size:24px;color:#9a3b2a;margin-top:10px">vazio. confia em mim.</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 5 — ITEM 2 -->
+  <sc-if value="{{ s5 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 30px;z-index:10">
+    <div style="animation:drawIn .55s cubic-bezier(.2,.7,.2,1) both;--r:2.5deg;background:#f4ead6;color:#241c2a;padding:30px 26px;border-radius:3px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:300px;width:100%;text-align:center;position:relative">
+      <div style="position:absolute;top:-13px;right:30px;width:74px;height:22px;background:rgba(255,255,255,.55);transform:rotate(5deg)"></div>
+      <div style="font-family:'Special Elite',monospace;font-size:50px;line-height:1;color:var(--ra2,#e94560)">02</div>
+      <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;color:#9a8472;margin-top:4px">DOS CINCO</div>
+      <div style="margin:16px auto;width:64px;height:64px;border-radius:50%;background:rgba(178,30,53,.07);display:flex;align-items:center;justify-content:center;color:var(--acc,#b21e35)"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8h15a2 2 0 0 1 2 2v28a2 2 0 0 1-2 2H15a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/><line x1="19" y1="8" x2="19" y2="40"/><line x1="23" y1="17" x2="28" y2="17"/><line x1="23" y1="23" x2="28" y2="23"/><line x1="23" y1="29" x2="26" y2="29"/></svg></div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;margin:0;color:#241c2a">um caderno</h2>
+      <div style="font-family:'Caveat',cursive;font-size:24px;color:#9a3b2a;margin-top:10px">vamos escrever algumas coisas hoje.</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 6 — ITEM 3 -->
+  <sc-if value="{{ s6 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 30px;z-index:10">
+    <div style="animation:drawIn .55s cubic-bezier(.2,.7,.2,1) both;--r:-2deg;background:#f4ead6;color:#241c2a;padding:30px 26px;border-radius:3px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:300px;width:100%;text-align:center;position:relative">
+      <div style="position:absolute;top:-13px;left:30px;width:74px;height:22px;background:rgba(255,255,255,.55);transform:rotate(-5deg)"></div>
+      <div style="font-family:'Special Elite',monospace;font-size:50px;line-height:1;color:var(--ra2,#e94560)">03</div>
+      <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;color:#9a8472;margin-top:4px">DOS CINCO</div>
+      <div style="margin:18px auto;width:54px;height:54px;border-radius:50%;border:2px solid var(--acc,#b21e35);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--acc,#b21e35)">&#10084;</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;margin:0;color:#241c2a;line-height:1.1">um objeto que<br>significa algo</h2>
+      <div style="font-family:'Caveat',cursive;font-size:24px;color:#9a3b2a;margin-top:10px">seja criativa.</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 7 — ITEM 4 -->
+  <sc-if value="{{ s7 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 30px;z-index:10">
+    <div style="animation:drawIn .55s cubic-bezier(.2,.7,.2,1) both;--r:2deg;background:#f4ead6;color:#241c2a;padding:30px 26px;border-radius:3px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:300px;width:100%;text-align:center;position:relative">
+      <div style="position:absolute;top:-13px;right:34px;width:74px;height:22px;background:rgba(255,255,255,.55);transform:rotate(4deg)"></div>
+      <div style="font-family:'Special Elite',monospace;font-size:50px;line-height:1;color:var(--ra2,#e94560)">04</div>
+      <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;color:#9a8472;margin-top:4px">DOS CINCO</div>
+      <div style="margin:16px auto;width:64px;height:64px;border-radius:50%;background:rgba(178,30,53,.07);display:flex;align-items:center;justify-content:center;color:var(--acc,#b21e35)"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="15" width="34" height="18" rx="3"/><circle cx="24" cy="24" r="4"/><circle cx="13" cy="20" r="1.1"/><circle cx="35" cy="28" r="1.1"/></svg></div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;margin:0;color:#241c2a">uma nota de dinheiro</h2>
+      <div style="font-family:'Caveat',cursive;font-size:24px;color:#9a3b2a;margin-top:10px">qualquer valor &mdash; não muito alto.</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 8 — ITEM 5 -->
+  <sc-if value="{{ s8 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 30px;z-index:10">
+    <div style="animation:drawIn .55s cubic-bezier(.2,.7,.2,1) both;--r:-2.5deg;background:#f4ead6;color:#241c2a;padding:30px 26px;border-radius:3px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:300px;width:100%;text-align:center;position:relative">
+      <div style="position:absolute;top:-13px;left:50%;margin-left:-38px;width:76px;height:22px;background:rgba(255,255,255,.55);transform:rotate(3deg)"></div>
+      <div style="font-family:'Special Elite',monospace;font-size:50px;line-height:1;color:var(--ra2,#e94560)">05</div>
+      <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:3px;color:#9a8472;margin-top:4px">DOS CINCO</div>
+      <div style="margin:16px auto;width:64px;height:64px;border-radius:50%;background:rgba(178,30,53,.07);display:flex;align-items:center;justify-content:center;color:var(--acc,#b21e35)"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="17" y="18" width="14" height="21" rx="3"/><rect x="20" y="11" width="8" height="7" rx="1"/><path d="M33 15h4M33 19h5M34 23h4"/></svg></div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;margin:0;color:#241c2a">o seu perfume</h2>
+      <div style="font-family:'Caveat',cursive;font-size:24px;color:#9a3b2a;margin-top:10px">aquele do Natal &mdash; se ainda tiver.</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- STORY 9 — FECHAMENTO -->
+  <sc-if value="{{ s9 }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:70px 34px;z-index:10">
+    <div style="animation:storyIn .6s cubic-bezier(.2,.7,.2,1) both">
+      <div style="font-family:'Special Elite',monospace;letter-spacing:4px;font-size:12px;color:var(--rs,#ff8aa8);text-transform:uppercase">Beleza, acho que é isso</div>
+      <div style="height:18px"></div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:50px;line-height:1.05;color:#fdf4ea;margin:0">agora vamos dar<br>uma olhadinha…</h2>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;color:#cdb9d2;margin:20px auto 0;max-width:320px;line-height:1.5;text-wrap:pretty">…no nosso dia, parada por parada.</p>
+      <button onClick="{{ toItinerary }}" style="position:relative;z-index:36;margin-top:34px;border:none;background:linear-gradient(135deg,var(--ra,#ff5e8a),var(--ra2,#e94560));color:#fff;font-family:'Special Elite',monospace;font-size:13px;letter-spacing:1px;padding:15px 30px;border-radius:44px;cursor:pointer;box-shadow:0 14px 34px rgba(233,69,96,.45)">ver o nosso dia &#8595;</button>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</sc-if>
+
+<!-- ================= ENVELOPE / CARTA (abertura) ================= -->
+<sc-if value="{{ envMounted }}" hint-placeholder-val="{{ true }}">
+<div style="position:fixed;inset:0;z-index:40;overflow:hidden;background:#15131f">
+  <!-- metade esquerda -->
+  <div id="env-l" style="position:absolute;top:0;bottom:0;left:0;width:50.5%;background:#f1e3c8;background-image:linear-gradient(105deg,#f6ecd6,#e9d8b6);box-shadow:inset -16px 0 30px rgba(120,90,50,.18);will-change:transform"></div>
+  <!-- metade direita -->
+  <div id="env-r" style="position:absolute;top:0;bottom:0;right:0;width:50.5%;background:#f1e3c8;background-image:linear-gradient(255deg,#f6ecd6,#e9d8b6);box-shadow:inset 16px 0 30px rgba(120,90,50,.18);will-change:transform"></div>
+  <!-- grão -->
+  <div style="position:absolute;inset:0;pointer-events:none;opacity:.55;mix-blend-mode:multiply;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E&quot;)"></div>
+
+  <!-- conteúdo da carta -->
+  <div id="env-content" onClick="{{ open }}" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px;cursor:pointer;transition:opacity .5s ease;color:#3a2c1e">
+    <div style="font-family:'Special Elite',monospace;letter-spacing:4px;font-size:11px;text-transform:uppercase;color:#9a7b4a">Capítulo I de V &middot; 21/06</div>
+    <div style="margin-top:14px;font-family:'Special Elite',monospace;letter-spacing:5px;font-size:11px;text-transform:uppercase;color:#9a7b4a">Uma carta para</div>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-weight:700;font-style:italic;font-size:70px;margin:4px 0 0;color:#3a2c1e;line-height:1">Melissa</h1>
+    <div style="font-family:'Caveat',cursive;font-size:24px;color:#9a3b2a;margin-top:4px">do seu moço, com amor</div>
+    <!-- aviso de som -->
+    <div style="margin-top:22px;display:flex;align-items:center;gap:10px;background:rgba(154,31,51,.08);border:1px solid rgba(154,31,51,.22);padding:8px 15px;border-radius:30px">
+      <div style="display:flex;align-items:flex-end;gap:2.5px;height:15px">
+        <span style="width:3px;height:15px;background:#9a1f33;border-radius:2px;transform-origin:bottom;animation:eq .8s ease-in-out infinite"></span>
+        <span style="width:3px;height:15px;background:#9a1f33;border-radius:2px;transform-origin:bottom;animation:eq .8s ease-in-out .25s infinite"></span>
+        <span style="width:3px;height:15px;background:#9a1f33;border-radius:2px;transform-origin:bottom;animation:eq .8s ease-in-out .45s infinite"></span>
+      </div>
+      <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:1px;color:#7a4a3a">aumente o volume &middot; tem trilha sonora</div>
+    </div>
+    <!-- selo -->
+    <div style="margin-top:24px;width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 38% 34%, #d1455a, #9a1f33);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(154,31,51,.45),inset 0 2px 6px rgba(255,255,255,.25);animation:floatY 3.4s ease-in-out infinite">
+      <span style="font-size:28px;color:#f7d9df">&#10084;</span>
+    </div>
+    <div style="margin-top:24px;font-family:'Special Elite',monospace;font-size:12px;letter-spacing:2px;color:#7a6244;animation:softPulse 2.2s ease-in-out infinite">toque para abrir</div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ================= BOTÃO DE MÚSICA ================= -->
+<sc-if value="{{ showMusicBtn }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ toggleMusic }}" title="música" style="position:fixed;bottom:13px;left:13px;z-index:46;width:28px;height:28px;border-radius:50%;border:none;background:rgba(20,16,28,.16);color:var(--rs,#ff8aa8);font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.38;transition:opacity .3s" style-hover="opacity:.95">
+  <span style="animation:{{ musicAnim }}">{{ musicGlyph }}</span>
+</button>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:412,&quot;height&quot;:880},&quot;reelsTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Meia-noite&quot;,&quot;Veludo&quot;,&quot;Brasa&quot;],&quot;default&quot;:&quot;Brasa&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#b21e35&quot;,&quot;#8e1b3d&quot;,&quot;#7c2d12&quot;,&quot;#a23e2a&quot;],&quot;default&quot;:&quot;#b21e35&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;decor&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { phase: 'loading', story: 0, music: false, playing: false };
+  TOTAL = 10;
+
+  THEMES = {
+    'Meia-noite': { rg: 'radial-gradient(130% 90% at 50% 0%, #2a1730 0%, #1a1426 45%, #120f1c 100%)', ra: '#ff5e8a', ra2: '#e94560', rs: '#ff8aa8' },
+    'Veludo':     { rg: 'radial-gradient(130% 90% at 50% 0%, #2a1a44 0%, #1c1430 45%, #120f1c 100%)', ra: '#c77dff', ra2: '#9d4edd', rs: '#e0aaff' },
+    'Brasa':      { rg: 'radial-gradient(130% 90% at 50% 0%, #3a1b22 0%, #271119 45%, #160c10 100%)', ra: '#ff7e5f', ra2: '#e8455f', rs: '#ffb38a' },
+  };
+
+  applyTheme() {
+    const t = this.THEMES[this.props.reelsTheme] || this.THEMES['Meia-noite'];
+    const root = document.documentElement.style;
+    root.setProperty('--rg', t.rg);
+    root.setProperty('--ra', t.ra);
+    root.setProperty('--ra2', t.ra2);
+    root.setProperty('--rs', t.rs);
+    root.setProperty('--acc', this.props.accent || '#b21e35');
+  }
+
+  componentDidMount() {
+    document.documentElement.style.overflow = 'hidden';
+    this.audio = document.getElementById('bg-audio');
+    this.applyTheme();
+    this.waitAssets();
+  }
+
+  waitAssets() {
+    const audio = this.audio;
+    const audioReady = new Promise((res) => {
+      if (!audio) return res();
+      let done = false;
+      const d = () => { if (!done) { done = true; res(); } };
+      audio.addEventListener('canplaythrough', d, { once: true });
+      audio.addEventListener('canplay', d, { once: true });
+      audio.addEventListener('loadeddata', d, { once: true });
+      audio.addEventListener('error', d, { once: true });
+      try { audio.load(); } catch (e) { d(); }
+    });
+    const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    const assets = Promise.all([audioReady, fontsReady]).catch(() => {});
+    const safety = new Promise((res) => setTimeout(res, 7000));
+    const minTime = new Promise((res) => setTimeout(res, 1600));
+    Promise.all([Promise.race([assets, safety]), minTime]).then(() => {
+      if (this.state.phase === 'loading') this.setState({ phase: 'envelope' });
+    });
+  }
+
+  componentDidUpdate() {
+    this.applyTheme();
+  }
+
+  open = () => {
+    const c = document.getElementById('env-content');
+    const l = document.getElementById('env-l');
+    const r = document.getElementById('env-r');
+    if (c) c.style.opacity = '0';
+    if (l) l.style.animation = 'tearL .95s cubic-bezier(.55,.06,.3,1) forwards';
+    if (r) r.style.animation = 'tearR .95s cubic-bezier(.55,.06,.3,1) forwards';
+    if (this.audio) { this.audio.play().then(() => this.setState({ music: true })).catch(() => {}); }
+    setTimeout(() => this.setState({ phase: 'reels' }), 980);
+  };
+
+  next = () => {
+    if (this.state.story >= this.TOTAL - 1) { this.toItinerary(); return; }
+    this.setState(s => ({ story: s.story + 1 }));
+  };
+
+  prev = () => {
+    this.setState(s => ({ story: Math.max(0, s.story - 1) }));
+  };
+
+  toItinerary = () => {
+    this.setState({ phase: 'leaving' });
+    setTimeout(() => {
+      this.setState({ phase: 'itinerary' });
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.background = '#f3e7d2';
+      window.scrollTo(0, 0);
+      this.armReveals();
+    }, 640);
+  };
+
+  componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+  }
+
+  togglePlay = (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    this.setState(s => ({ playing: !s.playing }));
+    if (this.audio) {
+      if (this.audio.paused) { this.audio.play().then(() => this.setState({ music: true })).catch(() => {}); }
+    }
+  };
+
+  toggleMusic = (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const a = this.audio;
+    if (!a) return;
+    if (a.paused) { a.play().then(() => this.setState({ music: true })).catch(() => {}); }
+    else { a.pause(); this.setState({ music: false }); }
+  };
+
+  armReveals() {
+    const reveal = () => {
+      const els = document.querySelectorAll('[data-reveal]');
+      const trigger = window.innerHeight * 0.86;
+      els.forEach(el => {
+        if (el.dataset.revealed) return;
+        const top = el.getBoundingClientRect().top;
+        if (top < trigger) {
+          el.dataset.revealed = '1';
+          el.style.animation = 'revealUp .8s cubic-bezier(.2,.7,.2,1) forwards';
+          setTimeout(() => {
+            el.style.animation = 'none';
+            el.style.transition = 'none';
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+          }, 850);
+        }
+      });
+    };
+    this._onScroll = () => requestAnimationFrame(reveal);
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._onScroll, { passive: true });
+    requestAnimationFrame(reveal);
+    setTimeout(reveal, 80);
+  }
+
+  renderVals() {
+    const { phase, story, music, playing } = this.state;
+    const seg = [];
+    for (let i = 0; i < this.TOTAL; i++) seg.push({ bg: i <= story ? 'var(--ra,#ff5e8a)' : 'rgba(255,255,255,0.20)' });
+    const out = {
+      loadingMounted: phase === 'loading',
+      envMounted: phase === 'envelope',
+      reelsMounted: phase !== 'itinerary' && phase !== 'loading',
+      reelsFade: phase === 'leaving' ? 'opacity:0;pointer-events:none' : 'opacity:1',
+      showMusicBtn: phase === 'reels' || phase === 'leaving' || phase === 'itinerary',
+      musicGlyph: music ? '\u266B' : '\u266A',
+      musicAnim: music ? 'spinSlow 3.2s linear infinite' : 'none',
+      playGlyph: playing ? '\u23F8' : '\u25B6',
+      seg,
+      open: this.open, next: this.next, prev: this.prev,
+      toItinerary: this.toItinerary, toggleMusic: this.toggleMusic,
+      togglePlay: this.togglePlay,
+      decorOn: this.props.decor !== false,
+      stop: (e) => { if (e && e.stopPropagation) e.stopPropagation(); },
+    };
+    for (let i = 0; i < this.TOTAL; i++) out['s' + i] = (story === i);
+    return out;
+  }
+}
+</script>
+</body>
+</html>
